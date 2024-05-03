@@ -42,35 +42,41 @@ const company = {
 };
 
 function findValueByKey(companyName, obj = company) {
+  let foundCompanies = []; // масив, щоб зберігати знайдені компанії
+
   if (obj.name === companyName) {
-    return obj;
+    foundCompanies.push(obj); // додаємо об'єкт до масиву, якщо знаходимо компанію
   }
 
-  // перевіряємо, чи існують клієнти в об*єкті
+  // перевіряємо, чи є клієнти у поточному об'єкті
   if (obj.clients) {
     for (let client of obj.clients) {
-      // рекурсивно викликаємо функцію для кожного клієнта
+      // рекурсивно викликаємо функцію
       const result = findValueByKey(companyName, client);
-      if (result !== "Компанія не знайдена") {
-        return result;
-      }
+      foundCompanies.push(...result); // додаємо знайдені компанії до масиву
     }
   }
 
-  // перевіряємо, чи існують партнери в об*єкті
+  // перевіряємо, чи є партнери у поточному об'єкті
   if (obj.partners) {
     for (let partner of obj.partners) {
-      // рекурсивно викликаємо функцію для кожного партнера
+      // рекурсивно викликаємо функцію
       const result = findValueByKey(companyName, partner);
-      if (result !== "Компанія не знайдена") {
-        return result;
-      }
+      foundCompanies.push(...result); // додаємо знайдені компанії до масиву
     }
   }
 
-  // якщо компанія не знайдена виводимо:
-  return "Компанія не знайдена";
+  // повертаємо знайдені компанії або порожній масив, якщо компанія не знайдена
+  return foundCompanies;
 }
 
-const companyInfo = findValueByKey("Клієнт 1");
-console.log(companyInfo);
+const companyInfo = findValueByKey("Клієнт 1.2");
+
+// перевірка, чи є знайдені компанії
+if (companyInfo.length > 0) {
+  companyInfo.forEach(function (company) {
+    console.log(company);
+  });
+} else {
+  console.log("Компанія не знайдена");
+}
